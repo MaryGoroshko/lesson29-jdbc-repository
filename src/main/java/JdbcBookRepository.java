@@ -55,6 +55,7 @@ public class JdbcBookRepository implements IBookRepository {
 
     @Override
     public void saveBookAndAuthor(Book book, Author author) {
+
         if (author.id == INVALID_ID) {
             Optional<Author> matchingAuthor = authorDao.getAuthorByName(author.name);
             if (matchingAuthor.isPresent()) {

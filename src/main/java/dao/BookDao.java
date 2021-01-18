@@ -124,7 +124,6 @@ public class BookDao {
         }
     }
 
-
     public int insertBook(Book book) {
         final String insertTemplate =
                 "INSERT INTO books(title,price,publish_year,author_id) VALUES(?,?,?,?)";
@@ -139,7 +138,6 @@ public class BookDao {
             if (!cursor.next()) {
                 throw new RuntimeException("Failed to insert author");
             }
-
             return cursor.getInt(1);
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert book", e);
