@@ -68,11 +68,9 @@ public class JdbcBookRepository implements IBookRepository {
             authorDao.updateAuthor(author);
         }
 
-        book.authorId = author.id;
-
         if (book.id == INVALID_ID) {
             Optional<Book> matchingBook =
-                    bookDao.getBookByTitleAndAuthor(book.title, author.name);
+                    bookDao.getBookByName(book.title);
             if (matchingBook.isPresent()) {
                 book.id = matchingBook.get().id;
                 bookDao.updateBook(book);
@@ -85,14 +83,7 @@ public class JdbcBookRepository implements IBookRepository {
 
         AuthorBook authorBook = new AuthorBook();
         if (authorBook.id == INVALID_ID) {
-            Optional<AuthorBook> matchingID =
-                    authorBookDao.getAuthorBookById(authorBook.authorId, authorBook.bookId);
-            if (matchingID.isPresent()) {
-                authorBook.id = matchingID.get().id;
-                authorBookDao.updateAuthorBook(authorBook);
-            } else {
-                authorBook.id = authorBookDao.insertAuthorBook(author.id, book.id);
-            }
+            authorBookDao.insertAuthorBook(author.id, book.id);
         } else {
             authorBookDao.updateAuthorBook(authorBook);
         }
@@ -121,7 +112,7 @@ public class JdbcBookRepository implements IBookRepository {
 
         review.userId = user.id;
 
-        if (review.text.length() != INVALID_ID) {
+        if (review.text.length() != 0) {
             if (review.id == INVALID_ID) {
                 Optional<Review> matchingReview =
                         reviewDao.getReviewByUserAndText(review.userId, review.text);

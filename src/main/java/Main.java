@@ -75,12 +75,37 @@ public class Main {
 
         final Review review3 = new Review();
         review3.date = new Timestamp(System.currentTimeMillis());
-        review3.text = "It is a good book to learn programming";
+        review3.text = "It's a good book to learn programming";
+
+        final Author author4 = new Author();
+        author4.name = "Erich Gamma";
+        author4.birthYear = 1960;
+
+        final Book book4 = new Book();
+        book4.title = "Design Patterns: Elements of Reusable Object-Oriented Software";
+        book4.publishYear = 1994;
+        book4.price = new BigDecimal("10000");
+
+        final Author author5 = new Author();
+        author5.name = "Richard Helm";
+        author5.birthYear = 1959;
+
+        final Author author6 = new Author();
+        author6.name = "Ralph Johnson";
+        author6.birthYear = 1958;
+
+        final Author author7 = new Author();
+        author7.name = "John Vlissides";
+        author7.birthYear = 1957;
 
         repository.saveBookAndAuthor(book1, author1);
         repository.saveBookAndAuthor(book2, author2);
         repository.saveBookAndAuthor(book3, author2);
         repository.saveBookAndAuthor(book3, author3);
+        repository.saveBookAndAuthor(book4, author4);
+        repository.saveBookAndAuthor(book4, author5);
+        repository.saveBookAndAuthor(book4, author6);
+        repository.saveBookAndAuthor(book4, author7);
 
         repository.saveUserAndReview(book1, user1, review1);
         repository.saveUserAndReview(book2, user1, review2);
@@ -97,8 +122,7 @@ public class Main {
             " id INTEGER PRIMARY KEY AUTOINCREMENT," +
             " title VARCHAR(100)," +
             " publish_year INTEGER," +
-            " price DECIMAL(10,2)," +
-            " author_id INTEGER" +
+            " price DECIMAL(10,2)" +
             ")";
 
     public final String CreateAuthorsTableQuery = "CREATE TABLE IF NOT EXISTS authors (" +
@@ -109,10 +133,10 @@ public class Main {
 
     public final String CreateReviewsTableQuery = "CREATE TABLE IF NOT EXISTS reviews (" +
             " id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            " date DATE,"+
+            " date DATE," +
             " text VARCHAR(500)," +
-            " user_id INTEGER,"+
-            " book_id INTEGER"+
+            " user_id INTEGER," +
+            " book_id INTEGER" +
             ")";
 
     public final String CreateUsersTableQuery = "CREATE TABLE IF NOT EXISTS users (" +
@@ -133,9 +157,13 @@ public class Main {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CreateAuthorsTableQuery);
             statement.executeUpdate(CreateBooksTableQuery);
+            statement.executeUpdate(CreateAuthorsBooksTableQuery);
             statement.executeUpdate(CreateReviewsTableQuery);
             statement.executeUpdate(CreateUsersTableQuery);
-            statement.executeUpdate(CreateAuthorsBooksTableQuery);
+
+//            statement.executeUpdate("DROP TABLE authors");
+//            statement.executeUpdate("DROP TABLE books");
+//            statement.executeUpdate("DROP TABLE authors_books");
         }
     }
 }

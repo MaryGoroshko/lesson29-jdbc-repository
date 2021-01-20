@@ -7,5 +7,5 @@ public class Book {
     public String title;
     public int publishYear;
     public BigDecimal price;
-    public int authorId;
+//    public int authorId;
 }

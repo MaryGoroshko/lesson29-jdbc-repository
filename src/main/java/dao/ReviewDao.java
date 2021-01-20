@@ -1,8 +1,6 @@
 package dao;
 
-import models.Book;
 import models.Review;
-import models.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -69,13 +67,13 @@ public class ReviewDao {
     }
 
 //  One-to-many connection
-    public Collection<Review> getReviewsForBook(Book book) {
+    public Collection<Review> getReviewsForBook(String bookTitle) {
         final String template = "SELECT * FROM reviews" +
                 " JOIN books ON books.id = reviews.book_id" +
-                " WHERE books.id = ? ";
+                " WHERE books.title = ?";
         try (PreparedStatement statement = connection.prepareStatement(template)) {
             final Collection<Review> reviews = new ArrayList<>();
-            statement.setInt(1, book.id);
+            statement.setString(1, bookTitle);
             ResultSet cursor = statement.executeQuery();
             while (cursor.next()) {
                 reviews.add(createReviewFromCursorIfPossible(cursor));
@@ -87,13 +85,13 @@ public class ReviewDao {
     }
 
 //  One-to-many connection
-    public Collection<Review> getReviewsFromUser(User user) {
+    public Collection<Review> getReviewsFromUser(String userName) {
         final String template = "SELECT * FROM reviews" +
                 " JOIN users ON users.id = reviews.user_id" +
-                " WHERE users.id = ? ";
+                " WHERE users.name = ? ";
         try (PreparedStatement statement = connection.prepareStatement(template)) {
             final Collection<Review> reviews = new ArrayList<>();
-            statement.setInt(1, user.id);
+            statement.setString(1, userName);
             ResultSet cursor = statement.executeQuery();
             while (cursor.next()) {
                 reviews.add(createReviewFromCursorIfPossible(cursor));

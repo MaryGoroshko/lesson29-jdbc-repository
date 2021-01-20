@@ -35,7 +35,7 @@ public interface IBookRepository {
      */
     void saveUserAndReview(Book book, User user, Review review);
 
-    void deleteBook(int id);
+    void deleteBook(int id); //gjhgb,lgu
     void deleteBook(Book book);
     void deleteAuthor(int id);
     void deleteAuthor(Author author);

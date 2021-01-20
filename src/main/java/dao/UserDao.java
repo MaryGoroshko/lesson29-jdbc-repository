@@ -35,10 +35,8 @@ public class UserDao {
     }
 
     public void updateUser(User user) {
-
         final String updateTemplate =
                 "UPDATE users SET name = ?, email = ? WHERE id = ?";
-
         try (PreparedStatement statement = connection.prepareStatement(updateTemplate)) {
             statement.setString(1, user.name);
             statement.setString(2, user.email);

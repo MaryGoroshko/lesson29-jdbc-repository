@@ -70,7 +70,6 @@ public class AuthorDao {
         }
     }
 
-
     private Author createAuthorFromCursorIfPossible(ResultSet cursor) throws SQLException {
         final Author author = new Author();
         author.id = cursor.getInt("id");

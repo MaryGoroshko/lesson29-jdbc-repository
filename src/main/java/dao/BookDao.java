@@ -1,6 +1,5 @@
 package dao;
 
-import models.Author;
 import models.Book;
 
 import java.sql.*;
@@ -94,13 +93,13 @@ public class BookDao {
     }
 
     //  One-to-many query
-    public Collection<Book> getBooksByAuthor(Author author) {
+    public Collection<Book> getBooksByAuthor(String authorName) {
         final String template = "SELECT * FROM books" +
                 " JOIN authors ON authors.id = books.author_id" +
-                " WHERE authors.id = ?";
+                " WHERE authors.name = ?";
         try (PreparedStatement statement = connection.prepareStatement(template)) {
             final Collection<Book> books = new ArrayList<>();
-            statement.setInt(1, author.id);
+            statement.setString(1, authorName);
             ResultSet cursor = statement.executeQuery();
             while (cursor.next()) {
                 books.add(createBookFromCursorIfPossible(cursor));
@@ -126,14 +125,12 @@ public class BookDao {
 
     public int insertBook(Book book) {
         final String insertTemplate =
-                "INSERT INTO books(title,price,publish_year,author_id) VALUES(?,?,?,?)";
+                "INSERT INTO books(title,price,publish_year) VALUES(?,?,?)";
         try (PreparedStatement statement = connection.prepareStatement(insertTemplate)) {
             statement.setString(1, book.title);
             statement.setBigDecimal(2, book.price);
             statement.setInt(3, book.publishYear);
-            statement.setInt(4, book.authorId);
             statement.executeUpdate();
-
             ResultSet cursor = statement.getGeneratedKeys();
             if (!cursor.next()) {
                 throw new RuntimeException("Failed to insert author");
@@ -147,14 +144,13 @@ public class BookDao {
     public void updateBook(Book book) {
         final String updateTemplate =
                 "UPDATE books" +
-                        " SET title=?, price=?, publish_year=?, author_id=?" +
+                        " SET title=?, price=?, publish_year=?" +
                         " WHERE id=?";
         try (PreparedStatement statement = connection.prepareStatement(updateTemplate)) {
             statement.setString(1, book.title);
             statement.setBigDecimal(2, book.price);
             statement.setInt(3, book.publishYear);
-            statement.setInt(4, book.authorId);
-            statement.setInt(5, book.id);
+            statement.setInt(4, book.id);
             int affectedRows = statement.executeUpdate();
             if (affectedRows != 1) {
                 throw new IllegalArgumentException(
@@ -172,7 +168,6 @@ public class BookDao {
         book.title = cursor.getString("title");
         book.publishYear = cursor.getInt("publish_year");
         book.price = cursor.getBigDecimal("price");
-        book.authorId = cursor.getInt("author_id");
         return book;
     }
 }
